@@ -1,0 +1,35 @@
+# Unity默认忽略
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Cc]rashReport/
+
+# 包管理缓存
+.vs/
+.idea/
+*.sln
+*.csproj
+*.unityproj
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# 其他临时文件
+*.zip
+*.rar
+*.7z
+*.bak
+*.swp
