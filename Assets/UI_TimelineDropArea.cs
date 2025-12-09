@@ -107,10 +107,12 @@ public class UI_TimelineDropArea : MonoBehaviour, IDropHandler
     {
         int index = GetInsertIndex(GetMouseWorldY());
 
-        CreateBlockAt(index, "IF", CommandType.If_Start, new Color(0.9f, 0.8f, 0.2f));
-        CreateBlockAt(index + 1, "ELSE", CommandType.Else, new Color(0.8f, 0.8f, 0.2f));
-        CreateBlockAt(index + 2, "END IF", CommandType.End_If, new Color(0.5f, 0.5f, 0.5f));
+       
+        CreateBlockAt(index, CommandType.If_Start, "IF", new Color(0.9f, 0.8f, 0.2f));
+        CreateBlockAt(index + 1, CommandType.Else, "ELSE", new Color(0.8f, 0.8f, 0.2f));
+        CreateBlockAt(index + 2, CommandType.End_If, "END IF", new Color(0.5f, 0.5f, 0.5f));
     }
+
 
     void CreateBlockAt(int index, CommandType type, string labelText, Color color)
     {

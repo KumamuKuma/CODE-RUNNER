@@ -119,16 +119,6 @@ public class PriestUnit : MonoBehaviour
             case CommandType.Move_LeftDown: TryMoveToGrid(new Vector2Int(currentGridPos.x - 1, currentGridPos.y - 1)); break;
             case CommandType.Move_RightDown: TryMoveToGrid(new Vector2Int(currentGridPos.x + 1, currentGridPos.y - 1)); break;
 
-            case CommandType.Cast_Up: CastToGrid(new Vector2Int(currentGridPos.x, currentGridPos.y + 1)); break;
-            case CommandType.Cast_Down: CastToGrid(new Vector2Int(currentGridPos.x, currentGridPos.y - 1)); break;
-            case CommandType.Cast_Left: CastToGrid(new Vector2Int(currentGridPos.x - 1, currentGridPos.y)); break;
-            case CommandType.Cast_Right: CastToGrid(new Vector2Int(currentGridPos.x + 1, currentGridPos.y)); break;
-
-            case CommandType.Cast_LeftUp: CastToGrid(new Vector2Int(currentGridPos.x - 1, currentGridPos.y + 1)); break;
-            case CommandType.Cast_RightUp: CastToGrid(new Vector2Int(currentGridPos.x + 1, currentGridPos.y + 1)); break;
-            case CommandType.Cast_LeftDown: CastToGrid(new Vector2Int(currentGridPos.x - 1, currentGridPos.y - 1)); break;
-            case CommandType.Cast_RightDown: CastToGrid(new Vector2Int(currentGridPos.x + 1, currentGridPos.y - 1)); break;
-
             case CommandType.None:
                 _isCommandExecuting = false;
                 break;
