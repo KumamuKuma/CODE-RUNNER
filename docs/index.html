@@ -16,7 +16,6 @@
       font-family: Arial, Helvetica, sans-serif;
     "
   >
-    <!-- ✅ 说明文字放在最上面：一定能看到 -->
     <div
       style="
         margin-top: 20px;
@@ -47,8 +46,6 @@
       - Gai Yichen, 122020463, 122020463@link.cuhk.edu.cn<br />
       - Zhou Yuxuan, 123020357, 123020357@link.cuhk.edu.cn
     </div>
-
-    <!-- 游戏 Canvas 在文字下面 -->
     <canvas
       id="unity-canvas"
       width="1920"
@@ -68,7 +65,6 @@
     <script src="Build/docs.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // ✅ 移动端：自适应宽高，但不再用 fixed，全屏遮挡下面内容
         var meta = document.createElement("meta");
         meta.name = "viewport";
         meta.content =
