@@ -3,9 +3,9 @@ using UnityEngine.SceneManagement;
 
 public enum GameState
 {
-    Playing, // Game is in progress
-    Success, // All objectives completed
-    Fail     // Failure condition reached
+    Playing,
+    Success,
+    Fail
 }
 
 public class GameManager : MonoBehaviour
@@ -13,14 +13,24 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Game Configuration")]
-    public PriestUnit[] allPriests;       // Reference to all priests in the scene
-    public string successSceneName = "Success";
-    public string failSceneName = "Fail";
-    public float sceneLoadDelay = 1f;
+    public PriestUnit[] allPriests;
+
+    [Header("Managers & Config")]
+    public TurnManager turnManager;
+    public UI_TimelineDropArea timelineDropArea;
+    public LevelStarConfig starConfig;
+
+    [Header("UI Panels")]
+    public GameObject successPanel;
+    public GameObject failPanel;
+    public UI_SuccessPanel successPanelUI;
+
+    [Header("Scenes")]
+    public string mainMenuSceneName = "MainMenu";
 
     public GameState CurrentState { get; private set; }
 
-    void Awake()
+    private void Awake()
     {
         // Simple singleton pattern
         if (Instance != null && Instance != this)
@@ -29,19 +39,18 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-        // If you want the manager to persist across scenes, uncomment:
-        // DontDestroyOnLoad(gameObject);
 
         CurrentState = GameState.Playing;
 
-        // If FirePit has static state, it can be reset here if needed.
+        if (successPanel != null) successPanel.SetActive(false);
+        if (failPanel != null) failPanel.SetActive(false);
     }
 
-    void Update()
+    private void Update()
     {
         if (CurrentState != GameState.Playing) return;
 
-        // Win condition: all priests are alive AND all priests have reached their endpoints
+        // Win condition: all priests alive and all have reached the goal
         if (CheckAllPriestsAlive() && CheckAllPriestsReachEnd())
         {
             SetGameState(GameState.Success);
@@ -49,11 +58,10 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Central method to set game state and trigger success/fail logic.
+    /// Sets the current game state and triggers the corresponding UI / animations.
     /// </summary>
     public void SetGameState(GameState newState)
     {
-        // Avoid repeated transitions (e.g., multiple Fail calls)
         if (CurrentState == newState) return;
 
         CurrentState = newState;
@@ -62,26 +70,56 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Success:
                 Debug.Log("Game success!");
-                // Trigger victory animations for all alive priests
+
                 foreach (PriestUnit priest in allPriests)
                 {
                     if (priest != null && priest.IsAlive)
-                    {
                         priest.PlayVictoryAnimation();
-                    }
                 }
-                Invoke(nameof(LoadSuccessScene), sceneLoadDelay);
+
+                int stars = CalculateStars();
+                Debug.Log("Stars earned: " + stars);
+
+                if (successPanel != null) successPanel.SetActive(true);
+                if (successPanelUI != null) successPanelUI.ShowStars(stars);
+
+                // Optional: pause game here by setting Time.timeScale = 0
                 break;
 
             case GameState.Fail:
-                Debug.Log("Game failed: priest died or conditions not satisfied.");
-                Invoke(nameof(LoadFailScene), sceneLoadDelay);
+                Debug.Log("Game failed.");
+
+                if (failPanel != null) failPanel.SetActive(true);
+
+                // Optional: pause game here by setting Time.timeScale = 0
                 break;
         }
     }
 
     /// <summary>
-    /// Check whether all priests are alive.
+    /// Computes star rating based on command line count and total steps.
+    /// </summary>
+    int CalculateStars()
+    {
+        int stars = 1;
+
+        if (starConfig == null || turnManager == null || timelineDropArea == null)
+            return stars;
+
+        int lineCount = timelineDropArea.CurrentLineCount;
+        int stepCount = turnManager.TotalStepCount;
+
+        if (lineCount <= starConfig.maxCommandLinesForExtraStar)
+            stars++;
+
+        if (stepCount <= starConfig.maxStepsForExtraStar)
+            stars++;
+
+        return Mathf.Clamp(stars, 1, 3);
+    }
+
+    /// <summary>
+    /// Checks if all priests are alive.
     /// </summary>
     private bool CheckAllPriestsAlive()
     {
@@ -96,7 +134,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Check whether all priests have reached their endpoints.
+    /// Checks if all priests have reached the goal tile.
     /// </summary>
     private bool CheckAllPriestsReachEnd()
     {
@@ -110,19 +148,22 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    private void LoadSuccessScene()
-    {
-        SceneManager.LoadScene(successSceneName);
-    }
-
-    private void LoadFailScene()
-    {
-        SceneManager.LoadScene(failSceneName);
-    }
-
+    /// <summary>
+    /// Reloads the current scene and resets the game state.
+    /// </summary>
     public void RestartGame()
     {
+        // Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         CurrentState = GameState.Playing;
+    }
+
+    /// <summary>
+    /// Returns to the main menu scene.
+    /// </summary>
+    public void BackToMainMenu()
+    {
+        // Time.timeScale = 1f;
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 }

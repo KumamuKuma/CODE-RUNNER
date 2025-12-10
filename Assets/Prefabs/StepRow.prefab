@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 10
+  m_MinWidth: 20
   m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: -1
@@ -345,6 +345,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4733861820250898193}
     m_Modifications:
+    - target: {fileID: -5238603236120865798, guid: 67d2c8ad9a4a6e24b91b326e22812548,
+        type: 3}
+      propertyPath: indexText
+      value: 
+      objectReference: {fileID: 3651037190330719347}
     - target: {fileID: 3732682882147651626, guid: 67d2c8ad9a4a6e24b91b326e22812548,
         type: 3}
       propertyPath: m_Sprite
